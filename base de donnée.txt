@@ -1,0 +1,85 @@
+//note
+CREATE TABLE [dbo].[note] (
+    [id_note]     INT        NOT NULL,
+    [id_matiere]  INT        NOT NULL,
+    [id_etudiant] INT        NOT NULL,
+    [note_examen] FLOAT (53) NULL,
+    [note_Ds1]    FLOAT (53) NULL,
+    [note_Ds2]    FLOAT (53) NULL,
+    [note_tp]     FLOAT (53) NULL,
+    [note_Orale]  FLOAT (53) NULL,
+    PRIMARY KEY CLUSTERED ([id_note] ASC),
+    CONSTRAINT [FK_note_etudiant] FOREIGN KEY ([id_etudiant]) REFERENCES [dbo].[etudiant] ([id_etudiant]),
+    CONSTRAINT [FK_note_matiere] FOREIGN KEY ([id_matiere]) REFERENCES [dbo].[matiere] ([id_matiere])
+);
+
+
+//matiere
+
+CREATE TABLE [dbo].[matiere] (
+    [id_matiere]    INT          NOT NULL,
+    [nom_matiere]   VARCHAR (50) NOT NULL,
+    [credit]        INT          NOT NULL,
+    [DS]            TINYINT      DEFAULT ((0)) NOT NULL,
+    [coefficient]   INT          NOT NULL,
+    [id_enseignant] INT          NOT NULL,
+    PRIMARY KEY CLUSTERED ([id_matiere] ASC),
+    CONSTRAINT [FK_matiere_enseignant] FOREIGN KEY ([id_enseignant]) REFERENCES [dbo].[enseignant] ([id_enseignant])
+);
+
+
+//filiere_matiere
+
+CREATE TABLE [dbo].[filiere_matiere] (
+    [id]         INT IDENTITY (1, 1) NOT NULL,
+    [id_filiere] INT NOT NULL,
+    [id_matiere] INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [FK_filiere_matiere_matiere] FOREIGN KEY ([id_matiere]) REFERENCES [dbo].[matiere] ([id_matiere]),
+    CONSTRAINT [FK_filiere_matiere_filiere] FOREIGN KEY ([id_filiere]) REFERENCES [dbo].[filiere] ([id_filiere])
+);
+
+// filiere
+
+CREATE TABLE [dbo].[filiere] (
+    [id_filiere]  INT           NOT NULL,
+    [abriviation] VARCHAR (100) NOT NULL,
+    [nom_filiere] VARCHAR (250) NOT NULL,
+    PRIMARY KEY CLUSTERED ([id_filiere] ASC)
+);
+
+//etudiant
+
+CREATE TABLE [dbo].[etudiant] (
+    [id_etudiant]    INT           NOT NULL,
+    [cin]            INT           NOT NULL,
+    [nom]            VARCHAR (150) NOT NULL,
+    [prenom]         VARCHAR (150) NOT NULL,
+    [adresse]        VARCHAR (150) NOT NULL,
+    [telephone]      INT           NOT NULL,
+    [date_naissance] DATE          NOT NULL,
+    [sexe]           VARCHAR (100) NOT NULL,
+    [login]          VARCHAR (250) NOT NULL,
+    [motpasse]       VARCHAR (250) NOT NULL,
+    [id_filiere]     INT           NOT NULL,
+    [niveau]         VARCHAR (250) NOT NULL,
+    PRIMARY KEY CLUSTERED ([id_etudiant] ASC),
+    CONSTRAINT [FK_etudiant_filiere] FOREIGN KEY ([id_filiere]) REFERENCES [dbo].[filiere] ([id_filiere])
+);
+
+//enseignant
+
+CREATE TABLE [dbo].[enseignant] (
+    [id_enseignant]  INT           NOT NULL,
+    [cin]            INT           NOT NULL,
+    [nom]            VARCHAR (150) NOT NULL,
+    [prenom]         VARCHAR (150) NOT NULL,
+    [telephone]      INT           NOT NULL,
+    [adresse]        VARCHAR (150) NOT NULL,
+    [date_naissance] DATE          NOT NULL,
+    [sexe]           VARCHAR (100) NOT NULL,
+    [login]          VARCHAR (250) NOT NULL,
+    [motpasse]       VARCHAR (250) NOT NULL,
+    PRIMARY KEY CLUSTERED ([id_enseignant] ASC)
+);
+
